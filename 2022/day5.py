@@ -84,12 +84,8 @@ def part2():
         from_pile = l[1]
         to_pile = l[2]
 
-        # insert
         for n in range(move, 0, -1):
             stack_list[to_pile - 1].appendleft(stack_list[from_pile - 1][n - 1])
-
-        # remove
-        for n in range(move, 0, -1):
             del stack_list[from_pile - 1][n - 1]
 
     final_topstack = ''
