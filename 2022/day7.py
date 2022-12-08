@@ -49,9 +49,9 @@ class File:
 
 def part1():
     level, last_level = 1, 0
-    last_folder = ''
+    last_folder = ['']
     folder_list = []
-    folder = Directory(name="root", base_folder=last_folder, level=level) # root
+    folder = Directory(name="root", base_folder=last_folder[0], level=level)  # root
     folder_list.append(folder)
     for idx, line in enumerate(lines):
         print(line)
@@ -64,15 +64,15 @@ def part1():
                         last_level = level
 
                     level += 1
-                    last_folder = folder
+                    last_folder[0] = folder
 
                 else:  # go back
-                    last_folder = last_folder.base_folder
+                    last_folder[0] = last_folder[0].base_folder
                     level -= 1
         else:
             if line_split[0] == 'dir':
                 folder_name = line_split[1]
-                folder = Directory(name=folder_name, base_folder=last_folder, level=level)
+                folder = Directory(name=folder_name, base_folder=last_folder[0], level=level)
 
                 folder_list.append(folder)
 
@@ -81,7 +81,7 @@ def part1():
                 file_size = int(line_split[0])
                 file_name = line_split[1]
                 file = File(name=file_name, size=file_size)
-                last_folder.files.append(file)
+                last_folder[0].files.append(file)
 
     for fol in folder_list:
         if fol.level == last_level:
