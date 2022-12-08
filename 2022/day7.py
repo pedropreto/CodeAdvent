@@ -17,22 +17,25 @@ with open(file_path) as f:
 
 
 class Directory:
-    def __init__(self, name, base_folder, folders=[], files=[], size=0, size_calculated=False, added_to_list=False):
+    def __init__(self, name, level, base_folder, folders=[], files=[], size=0, size_calculated=False):
+        self.level = level
         self.name = name
         self.folders = folders
         self.files = files
         self.base_folder = base_folder
         self.size = size
         self.size_calculated = size_calculated
-        self.added_to_list = added_to_list
+
+    # def __eq__(self, other):
+    #     return self.name == other.name and self.base_folder == other.base_folder
 
     def __repr__(self):
         if self.base_folder == '':
             base = ''
         else:
             base = self.base_folder.name
-        return "name:" + self.name + "\nsize:" + str(self.size) + "\nnumber of folders:" + str(len(self.folders)) + \
-               "\nnumber of files:" + str(len(self.files)) + "\nbase folder:" + base
+        return "\n\nname:" + self.name + "\nsize:" + str(self.size) + "\nnumber of folders:" + str(len(self.folders)) + \
+               "\nnumber of files:" + str(len(self.files)) + "\nbase folder:" + base + "\nlevel:" + str(self.level)
 
 
 class File:
@@ -45,40 +48,44 @@ class File:
 
 
 def part1():
+    level, last_level = 1, 0
     last_folder = ''
     folder_list = []
+    folder = Directory(name="root", base_folder=last_folder, level=level) # root
+    folder_list.append(folder)
     for idx, line in enumerate(lines):
         print(line)
         line_split = line.split(' ')
         if line_split[0] == '$':
             if line_split[1] == 'cd':
                 if not "." in line_split[2]:  # does not contain .
-                    folder_name = line_split[2]
-                    folder = Directory(name=folder_name, base_folder=last_folder)
 
-                    last_folder = copy.deepcopy(folder)
-                    if not last_folder.added_to_list:
-                        folder_list.append(last_folder)
-                        last_folder.added_to_list = True
+                    if level > last_level:
+                        last_level = level
 
-                else:
-                    last_folder = copy.deepcopy(last_folder.base_folder)
+                    level += 1
+                    last_folder = folder
+
+                else:  # go back
+                    last_folder = last_folder.base_folder
+                    level -= 1
         else:
             if line_split[0] == 'dir':
                 folder_name = line_split[1]
-                folder = Directory(name=folder_name, base_folder=last_folder)
-                if not last_folder.added_to_list:
-                    folder_list.append(folder)
-                    folder.added_to_list = True
-                last_folder.folders.append(folder)
+                folder = Directory(name=folder_name, base_folder=last_folder, level=level)
+
+                folder_list.append(folder)
+
+                folder.base_folder.folders.append(folder)
             else:
-                file_size = line_split[0]
+                file_size = int(line_split[0])
                 file_name = line_split[1]
                 file = File(name=file_name, size=file_size)
                 last_folder.files.append(file)
 
     for fol in folder_list:
-        check_folder_size(fol)
+        if fol.level == last_level:
+            check_folder_size_files(fol)
 
     sum_size = 0
     for fol in folder_list:
@@ -113,9 +120,10 @@ def check_folder_size_v2(folder):
                 check_folder_size_v2(dir)
 
 
-def check_folder_size_(folder):
+def check_folder_size_files(folder):
     for file in folder.files:
-        folder.size += int(file.size)
+        folder.size += file.size
+    folder.base_folder.size += folder.size
 
 
 
