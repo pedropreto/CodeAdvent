@@ -17,13 +17,14 @@ with open(file_path) as f:
 
 
 class Directory:
-    def __init__(self, name, base_folder, folders=[], files=[], size=0, size_calculated=False):
+    def __init__(self, name, base_folder, folders=[], files=[], size=0, size_calculated=False, added_to_list=False):
         self.name = name
         self.folders = folders
         self.files = files
         self.base_folder = base_folder
         self.size = size
         self.size_calculated = size_calculated
+        self.added_to_list = added_to_list
 
     def __repr__(self):
         if self.base_folder == '':
@@ -54,15 +55,21 @@ def part1():
                 if not "." in line_split[2]:  # does not contain .
                     folder_name = line_split[2]
                     folder = Directory(name=folder_name, base_folder=last_folder)
-                    folder_list.append(folder)
-                    last_folder = copy.copy(folder)
+
+                    last_folder = copy.deepcopy(folder)
+                    if not last_folder.added_to_list:
+                        folder_list.append(last_folder)
+                        last_folder.added_to_list = True
+
                 else:
-                    last_folder = copy.copy(last_folder.base_folder)
+                    last_folder = copy.deepcopy(last_folder.base_folder)
         else:
             if line_split[0] == 'dir':
                 folder_name = line_split[1]
                 folder = Directory(name=folder_name, base_folder=last_folder)
-                folder_list.append(folder)
+                if not last_folder.added_to_list:
+                    folder_list.append(folder)
+                    folder.added_to_list = True
                 last_folder.folders.append(folder)
             else:
                 file_size = line_split[0]
@@ -73,7 +80,12 @@ def part1():
     for fol in folder_list:
         check_folder_size(fol)
 
-    return folder_list
+    sum_size = 0
+    for fol in folder_list:
+        if fol.size <= 100000:
+            sum_size += fol.size
+
+    return folder_list, sum_size
 
 
 def part2():
@@ -87,7 +99,7 @@ def part2():
     return first_marker
 
 
-def check_folder_size(folder):
+def check_folder_size_v2(folder):
     if folder.size_calculated:
         pass
     else:
@@ -98,8 +110,14 @@ def check_folder_size(folder):
             if dir.size_calculated:
                 folder.size += dir.size
             else:
-                check_folder_size(dir)
+                check_folder_size_v2(dir)
 
 
-count = part1()
-print(count)
+def check_folder_size_(folder):
+    for file in folder.files:
+        folder.size += int(file.size)
+
+
+
+result, sum = part1()
+print(result, sum)
