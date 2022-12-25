@@ -95,15 +95,17 @@ def part1():
     return folder_list, sum_size
 
 
-def part2():
-    marker_number, first_marker, input = 14, 0, lines[0]
-    for i in range(marker_number, len(input)):
-        x = input[i - marker_number:i]
-        if len(set(x)) == len(x):
-            first_marker = i
-            break
-
-    return first_marker
+def part1_alt():
+    folder_list = []
+    folder = {"name": "root", "base_folder": '', "size": 0}
+    for line in lines:
+        line_split = line.split(' ')
+        if line_split[0] == '$':
+            if line_split[1] == 'cd':
+                if not "." in line_split[2]:
+                    folder_name = line_split[2]
+                    folder = {"name": folder_name, "base_folder": }
+    return 1
 
 
 def check_folder_size_v2(folder):
