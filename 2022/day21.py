@@ -18,14 +18,12 @@ with open(file_path) as f:
 
 
 def part1():
-    monkey_yells = {}
     monkey_sub_monkeys = {}
     monkey_yells_number = {}
     monkey_yells_formula = {}
     for l in lines:
         monkey, yell = l.split(": ")
         yell_number = re.findall('[0-9]+', l.split(": ")[1])
-        monkey_yells[monkey] = yell
         if yell_number:
             # it is a number
             monkey_yells_number[monkey] = int(yell_number[0])
