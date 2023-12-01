@@ -22,43 +22,17 @@ def part1():
 
 
 def part2():
-    # this also solves part1
+
     final_number = 0
-    matches = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
-    first_part = ''
-    second_part = ''
 
     for line in lines:
-        # finding the first number
-        i = 0
-        while True:
-            first_part += line[i]
-            found = find_substring_in_string(first_part, list(matches.keys()))
-            if found:
-                first_part = first_part.replace(found, str(matches[found]))
-                break
-            else:
-                if bool(re.search(r'\d', first_part)):
-                    break
-            i += 1
 
-        # finding the last number
-        j = -1
-        while True:
-            second_part = line[j] + second_part
-            found = find_substring_in_string(second_part, list(matches.keys()))
-            if found:
-                second_part = second_part.replace(found, str(matches[found]))
-                break
-            else:
-                if bool(re.search(r'\d', second_part)):
-                    break
-            j -= 1
+        first_part = search_numbers_in_string(line=line, search_type='first')
+        last_part = search_numbers_in_string(line=line, search_type='last')
 
-        line = first_part + second_part
+        line = first_part + last_part
         line_number = join_numbers(line)
         final_number += int(line_number)
-        first_part, second_part = '', ''
 
     return final_number
 
@@ -82,6 +56,44 @@ def join_numbers(line):
     number = line[0] + line[-1]
 
     return number
+
+
+def search_numbers_in_string(line, search_type):
+    """
+    This functions searchs for a number in the form of a digit or a string (eg. four = 4)
+    Depending on the search type it could be the first or the last number
+
+    @param line: string to check
+    @param search_type: check if you want to search for the FIRST or LAST number of the string
+    @return: returns the first (or last) number of the string
+    """
+    matches = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
+    partial_string = ''
+
+    if search_type.lower() == 'first':
+        i = 0
+        add_number = 1
+    elif search_type.lower() == 'last':
+        i = -1
+        add_number = -1
+
+    while True:
+
+        if search_type.lower() == 'first':
+            partial_string += line[i]
+        elif search_type.lower() == 'last':
+            partial_string = line[i] + partial_string
+
+        found = find_substring_in_string(partial_string, list(matches.keys()))
+        if found:
+            partial_string = partial_string.replace(found, str(matches[found]))
+            break
+        else:
+            if bool(re.search(r'\d', partial_string)):
+                break
+        i += add_number
+
+    return partial_string
 
 
 result = part2()
