@@ -39,25 +39,29 @@ def part1():
     return final_number
 
 
+def part2():
+    final_number = 0
+    for line in lines:
+        pattern = r'(\d+ \w+)'
+        matches = re.findall(pattern, line)
+        color_dict = {"blue": 0, "red": 0, "green": 0}
 
-# def part1():
-#     limits = {"red": 12, "green": 13, "blue": 14}
-#
-#     for line in lines:
-#         print(line)
-#         pattern = r'(\d+ \w+, \d+ \w+;)'
-#         matches = re.findall(pattern, line)
-#         for match in matches:
-#             single_pattern = r'(\w+)'
-#             single_match = re.findall(single_pattern, match)
-#             print(single_match)
-#             if single_match[1] > limits[single_match[1]]:
-#                 print('Not possible')
-#         print(matches)
+        for match in matches:
+            ball_pattern = r'(\w+)'
+            number, color = re.findall(ball_pattern, match)
+
+            if int(number) > int(color_dict[color]):
+                color_dict[color] = number
+
+        print(color_dict)
+        product = 1
+        for value in color_dict.values():
+            product *= int(value)
+        final_number += product
+
+    return final_number
 
 
-
-
-result = part1()
+result = part2()
 print(result)
 
