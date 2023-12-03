@@ -46,18 +46,53 @@ def part1():
     return sum(part_numbers)
 
 
+def part2():
+    gear_numbers, gear_ratios = [], []
+    for index_line, line in enumerate(lines):
+        for index_col, char in enumerate(line):
+            if char == '*':
+                part_numbers = get_part_numbers([index_line, index_col])
+                if len(part_numbers) == 2:
+                    print('It\'s a gear')
+                    gear_ratios.append(np.prod(part_numbers))
+
+    return sum(gear_ratios)
+
+
+def get_part_numbers(coordinates):
+    part_numbers = []
+
+    # check up
+    x, y = coordinates[0] - 1, coordinates[1]
+    check_sides_and_diagonals(x, y, lines, part_numbers, side='up')
+
+    # check down
+    x, y = coordinates[0] + 1, coordinates[1]
+    check_sides_and_diagonals(x, y, lines, part_numbers, side='down')
+
+    # check left
+    x, y = coordinates[0], coordinates[1] - 1
+    check_sides_and_diagonals(x, y, lines, part_numbers, side='left')
+
+    # check right
+    x, y = coordinates[0], coordinates[1] + 1
+    check_sides_and_diagonals(x, y, lines, part_numbers, side='right')
+
+    return part_numbers
+
+
 def check_sides_and_diagonals(x, y, lines, part_numbers, side):
     if lines[x][y] != '.':
         number = get_number(x, y)
         part_numbers.append(int(number))
         print(number)
     else:
-        # check up left
+        # check diagonal left
         if lines[x][y - 1] != '.' and side in ['up', 'down']:
             number = get_number(x, y - 1)
             part_numbers.append(int(number))
             print(number)
-        # check up right
+        # check diagonal right
         if lines[x][y + 1] != '.' and side in ['up', 'down']:
             number = get_number(x, y + 1)
             part_numbers.append(int(number))
@@ -100,6 +135,6 @@ def search_number(col, string_line, direction):
     return final_position
 
 
-result = part1()
+result = part2()
 print(result)
 
