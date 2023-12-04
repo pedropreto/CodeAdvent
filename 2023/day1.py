@@ -4,7 +4,7 @@ import time
 import os
 import re
 
-file = "day1.txt"
+file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
 # opens the file

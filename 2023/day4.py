@@ -5,7 +5,7 @@ import os
 import re
 import numpy as np
 
-file = "day4.txt"
+file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
 # opens the file

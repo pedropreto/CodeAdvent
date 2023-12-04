@@ -4,7 +4,7 @@ import time
 import os
 import re
 
-file = "day2.txt"
+file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
 # opens the file
@@ -53,7 +53,6 @@ def part2():
             if int(number) > int(color_dict[color]):
                 color_dict[color] = number
 
-        print(color_dict)
         product = 1
         for value in color_dict.values():
             product *= int(value)

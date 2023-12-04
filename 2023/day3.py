@@ -5,12 +5,42 @@ import os
 import re
 import numpy as np
 
-file = "day3.txt"
+file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
 # opens the file
 with open(file_path) as f:
     lines = [line.rstrip() for line in f]  # takes the \n
+
+
+# def part1v2():
+#     part_numbers = []
+#
+#     for idx, line in enumerate(lines):
+#         for match in re.finditer(r'\d+', line):
+#             print(match)
+#             span = match.span() if match is not None else None
+#             print(line)
+#             print(match, span)
+#
+#             # check left and right
+#             x_start, x_end = span[0], span[1]
+#             if (span[0] != 0 and line[x_start - 1] != '.') or (span[1] > len(line) and line[x_end + 1] != '.'):
+#                 part_numbers.append(int(match.group()))
+#                 break
+#
+#             # check line above and below
+#             substring_check_above = lines[idx - 1][span[0]: span[1] + 1]
+#             substring_check_below = lines[idx + 1][span[0]: span[1] + 1]
+#             if (not all(substring_check_above.isdigit() or substring_check_above == '.')) \
+#                     or not all(substring_check_below.isdigit() or substring_check_below == '.'):
+#                 # it has special characters
+#                 part_numbers.append(int(match.group()))
+#                 break
+
+
+
+    return False
 
 
 def part1():
@@ -135,6 +165,6 @@ def search_number(col, string_line, direction):
     return final_position
 
 
-result = part2()
+result = part1v2()
 print(result)
 
