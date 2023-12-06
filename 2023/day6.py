@@ -5,6 +5,8 @@ import os
 import re
 import numpy as np
 
+start = time.time()
+
 file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
@@ -47,13 +49,17 @@ def part2():
     beating_ways = 0
     for i in range(1, int(time)):
         distance = (int(time) - i) * i
-        beating_ways += 1 if distance > int(record_distance) else 0
-
-        if i > int(time) / 2 and distance < int(record_distance):
+        if distance > int(record_distance):
             break
+
+        beating_ways = int(time) - 1 - 2 * i
 
     return beating_ways
 
 
 result = part2()
 print(result)
+
+end = time.time()
+
+print(f'This took {(end-start)} seconds')
