@@ -36,16 +36,9 @@ def part1():
 
 
 def part2():
-
     times = re.findall(r'\d+', lines[0].split(':')[1])
     record_distances = re.findall(r'\d+', lines[1].split(':')[1])
-
-    time, record_distance = '', ''
-    for x in times:
-        time = time + x
-
-    for y in record_distances:
-        record_distance = record_distance + y
+    time, record_distance = ''.join(times), ''.join(record_distances)
 
     beating_ways = 0
     for i in range(1, int(time)):
@@ -62,13 +55,9 @@ def part2_luis_moura_style():
 
     times = re.findall(r'\d+', lines[0].split(':')[1])
     record_distances = re.findall(r'\d+', lines[1].split(':')[1])
-    time, record_distance = '', ''
-    for idx, x in enumerate(times):
-        time = time + x
-        record_distance = record_distance + record_distances[idx]
+    time, record_distance = ''.join(times), ''.join(record_distances)
 
     a, b, c = -1, int(time), -int(record_distance)
-
     d = (b ** 2) - (4 * a * c)
     first_above_record = math.ceil((-b + math.sqrt(d)) / (2 * a))
     last_above_record = math.floor((-b - math.sqrt(d)) / (2 * a))
