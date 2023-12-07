@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import math
 import time
 import os
 import re
 import numpy as np
 
-start = time.time()
+start = time.time() * 1000
 
 file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
@@ -57,9 +58,27 @@ def part2():
     return beating_ways
 
 
-result = part2()
+def part2_luis_moura_style():
+
+    times = re.findall(r'\d+', lines[0].split(':')[1])
+    record_distances = re.findall(r'\d+', lines[1].split(':')[1])
+    time, record_distance = '', ''
+    for idx, x in enumerate(times):
+        time = time + x
+        record_distance = record_distance + record_distances[idx]
+
+    a, b, c = -1, int(time), -int(record_distance)
+
+    d = (b ** 2) - (4 * a * c)
+    first_above_record = math.ceil((-b + math.sqrt(d)) / (2 * a))
+    last_above_record = math.floor((-b - math.sqrt(d)) / (2 * a))
+
+    return last_above_record - first_above_record + 1
+
+
+result = part2_luis_moura_style()
 print(result)
 
-end = time.time()
+end = time.time() * 1000
 
-print(f'This took {(end-start)} seconds')
+print(f'This took {(end-start)} miliseconds')
