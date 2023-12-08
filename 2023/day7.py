@@ -68,7 +68,6 @@ def part2():
 
 
 def compare_hands_part2(hand_list, card_value):
-    point_attr = {2: 1, 3: 4, 4: 9, 5: 16}
     first_hand, second_hand = hand_list
     # count cards in each hand
     count_dict_fh, count_dict_sh = {}, {}
@@ -87,10 +86,10 @@ def compare_hands_part2(hand_list, card_value):
     joker = 'J'
 
     for idx, dict in enumerate(hands_counter):
-        if joker in dict:
+        if joker in dict and dict[joker] < len(first_hand):
             n_joker = dict[joker]
             del dict[joker]
-            print(first_hand, second_hand)
+            # print(first_hand, second_hand)
             dict[max(dict, key=dict.get)] += n_joker
 
         for key, value in dict.items():
