@@ -11,16 +11,17 @@ file_path = os.path.join("inputs", file)
 with open(file_path) as f:
     content = f.read()
 
+
+
+
 def part1():
     final_result = 0
-    pattern = r"mul\(\d+(?:,\d+)*\)"
+    pattern = r"mul\(\d+,\d+\)"
     matches = re.findall(pattern, content)
     print(matches)
 
     for match in matches:
-        numbers = re.findall(r'\d+', match)
-        print(numbers)
-        multiplication = int(numbers[0]) * int(numbers[-1])
+        multiplication = product(match)
         final_result += multiplication
         print(f'match is {match}')
         print(f'multiplication is {multiplication}')
@@ -28,5 +29,36 @@ def part1():
     return final_result
 
 
-result = part1()
+def part2():
+    final_result = 0
+    new_lst = list()
+    switch = True
+    pattern = r"mul\(\d+,\d+\)|do\(\)|don't\(\)"
+    matches = re.findall(pattern, content)
+    print(matches)
+    for match in matches:
+        if match == 'don\'t()':
+            switch = False
+            continue
+        elif match == 'do()':
+            switch = True
+            continue
+
+        if switch:
+            new_lst.append(match)
+            result = product(match)
+            final_result += result
+
+
+    print(new_lst)
+
+    return final_result
+
+
+def product(string):
+    numbers = re.findall(r'\d+', string)
+    multiplication = int(numbers[0]) * int(numbers[-1])
+    return multiplication
+
+result = part2()
 print(result)
