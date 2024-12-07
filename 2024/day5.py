@@ -31,7 +31,7 @@ def part1():
 
         precedence_dict[page_after].append(page_before)
 
-    print(f'This is our {precedence_dict}')
+    print(f'These is our precedences map {precedence_dict}')
     for update in page_produce:
         matches = re.findall(pattern, update)
         print(f'Order of the pages to check: {matches}')
