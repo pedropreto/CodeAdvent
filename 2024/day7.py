@@ -61,7 +61,7 @@ def part2():
             # 0 is multiplication, 1 is sum, 2 is concat
             # print(config)
             result_list = list(elements_list)
-            final_list = do_operations_no_math_precedences_part2(result_list, config)
+            final_list = do_operations_no_math_precedences(result_list, config)
 
             final_result = sum(map(int, final_list))
             # print(f'Final result is {final_result}\n')
@@ -77,7 +77,7 @@ def part2():
     return sum_equation_results
 
 
-def do_operations_no_math_precedences_part2(result_list, config):
+def do_operations_no_math_precedences(result_list, config):
     for c in config:
         if c == 0:
             result = multiply(result_list[0], result_list[1])
@@ -90,44 +90,6 @@ def do_operations_no_math_precedences_part2(result_list, config):
         result_list.insert(0, result)
     return result_list
 
-def do_operations_no_math_precedences(result_list, config):
-    for c in config:
-        if c == 0:
-            result = multiply(result_list[0], result_list[1])
-        else:
-            result = add(result_list[0], result_list[1])
-        exclude_indexes = [0, 1]
-        result_list = [value for index, value in enumerate(result_list) if index not in exclude_indexes]
-        result_list.insert(0, result)
-    return result_list
-
-
-def do_operations_math_precedences(result_list, indexes_multiply):
-    try:
-        idx = indexes_multiply[0]
-    except IndexError:
-        idx = None
-
-    while True and len(indexes_multiply) > 0:
-        # multiply two values with the lower idx of multiply based on list with all the numbers
-        result = multiply(result_list[idx], result_list[idx + 1])
-        # create a new list without the elements that are being multiplied
-        exclude_indexes = [idx, idx + 1]
-        result_list = [value for index, value in enumerate(result_list) if index not in exclude_indexes]
-        # insert the multiplication result in the right place
-        result_list.insert(idx, result)
-        # lower all indexes because the list got 1 element shorter
-        indexes_multiply = [x - 1 for x in indexes_multiply]
-        del indexes_multiply[0]
-
-
-
-        if len(indexes_multiply) == 0:
-            break
-        else:
-            idx = indexes_multiply[0]
-
-    return result_list
 
 def add(a, b):
     return int(a) + int(b)
@@ -156,19 +118,6 @@ def get_all_configurations_new(n, num_values):
         configurations.append(configuration)
 
     return configurations
-
-def get_all_configurations(n):
-    # Generate all configurations by iterating through binary numbers
-    configurations = []
-    for i in range(2 ** n):
-        # Convert the number to a binary string and pad it with leading zeros to ensure length n
-        binary_string = bin(i)[2:].zfill(n)
-        # Convert the binary string to a list of integers (0s and 1s)
-        configuration = [int(bit) for bit in binary_string]
-        configurations.append(configuration)
-
-    return configurations
-
 
 result = part2()
 print(result)
