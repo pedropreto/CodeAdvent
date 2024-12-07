@@ -16,15 +16,10 @@ def part1():
     page_order_rules, page_produce = parse_input()
     result = 0
     precedence_dict = {}
-    page_list = []
     pattern = r"\d+"
     for rule in page_order_rules:
         matches = re.findall(pattern, rule)
         page_before, page_after = matches
-
-        for page in matches:
-            if page not in page_list:
-                page_list.append(page)
 
         if page_after not in precedence_dict:
             precedence_dict[page_after] = []
