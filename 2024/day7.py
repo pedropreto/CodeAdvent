@@ -74,9 +74,6 @@ def part2():
 
     return sum_equation_results
 
-    return sum_equation_results
-
-
 def do_operations_no_math_precedences(result_list, config):
     for c in config:
         if c == 0:
