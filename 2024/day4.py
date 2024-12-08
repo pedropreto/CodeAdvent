@@ -69,10 +69,45 @@ def part1():
 
 
 def part2():
+    print(lines)
+    matrix = lines
+
+    letters = ['S', 'M']
+    xmas = 0
+
+    for j, line in enumerate(matrix):
+        for i, letter in enumerate(line):
+
+            if letter == 'A':  # finds the A
+                # print(f'Row {j}, Column {i}')
+
+                # check for diagonals
+                letter_southeast = check_diagonal(i, j, matrix, 1, 1)
+                letter_northwest = check_diagonal(i, j, matrix, -1, -1)
+                if set([letter_southeast, letter_northwest]) == set(letters):
+                    letter_northeast = check_diagonal(i, j, matrix, 1, -1)
+                    letter_southwest = check_diagonal(i, j, matrix, -1, 1)
+                    if set([letter_northeast, letter_southwest]) == set(letters):
+                        xmas += 1
+
+    return xmas
 
 
-    return 0
+def check_diagonal(i,j, matrix, step_i, step_j):
+    increment_i = i + step_i
+    increment_j = j + step_j
+    if increment_i < 0 or increment_i >= len(matrix) or increment_j < 0 or increment_j >= len(matrix[0]):
+        print(f'Out of bounds')
+        return False
+    letter = matrix[increment_j][increment_i]
+    return letter
 
+def check_northwest(i, j, matrix):
+    if i == 0 or i == len(matrix) or j == 0 or j == len(matrix):
+        print(f'Out of bounds')
+        return False
+    letter = matrix[j - 1][i - 1]
+    return letter
 
 def check_down_left(i, j, word, matrix):
     increment = 1
@@ -98,5 +133,5 @@ def check_left(i, line, word):
     return False
 
 
-result = part1()
+result = part2()
 print(result)
