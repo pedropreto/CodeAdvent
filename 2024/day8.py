@@ -29,6 +29,7 @@ def part1():
     keys = antenna_positions.keys()
     for key in keys:
         positions = antenna_positions[key]
+        print(f'Calculating for antenna {key}')
         for i in range(len(positions)):
             for j in range(i + 1, len(positions)):
                 row_diff = positions[i][0] - positions[j][0]
@@ -43,13 +44,9 @@ def part1():
     antinodes = [point for point in antinodes if row_size > point[0] >= 0 and col_size > point[1] >= 0]
 
 
-    # check if antinodes are on the same spot of an antenna
-    antinodes = [point for point in antinodes if point not in global_antenna_positions]
     print(antinodes)
 
-
-
-    return len(antinodes)
+    return len(set(antinodes))
 
 
 result = part1()
