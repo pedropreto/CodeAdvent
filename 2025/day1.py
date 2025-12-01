@@ -21,7 +21,7 @@ def add_dial(start, x):
     rotations = abs(x) // 100
 
     # passing through zero
-    if (abs(x) - rotations * 100) > abs(((100 if x > 0 else 0) - start)) and start != 0:
+    if (abs(x) - rotations * 100) > abs((100 * (x > 0) - start)) and start != 0:
         passed += 1
 
     if final == 0:
