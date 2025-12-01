@@ -5,6 +5,7 @@ import time
 import os
 import re
 import numpy as np
+from click import password_option
 
 file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
@@ -13,36 +14,59 @@ file_path = os.path.join("inputs", file)
 with open(file_path) as f:
     lines = [line.rstrip() for line in f]  # takes the \n
 
-def part1():
+def add_dial(start, x):
+    passed = 0
+    pointing = False
+    final = (start + x) % 100
+    rotations = abs(x) // 100
+
+    # passing through zero
+    if (abs(x) - rotations * 100) > abs(((100 if x > 0 else 0) - start)) and start != 0:
+        passed += 1
+
+    if final == 0:
+        pointing = True
+        if start == 0:
+            rotations = max(0, rotations - 1)
+
+    passed += rotations
+
+
+    return passed, pointing, final
+
+def part1_2():
     dial = 50
-    password = 0
+    final_count = 0
+    pointing_count = 0
+    passed_count = 0
 
     for instruction in lines:
         direction = instruction[0]
         pattern = r"\d+"
         number = int(re.findall(pattern, instruction)[0])
 
-        if number > 100:
-            # last 2 digits
-            number = int(str(number)[-2:])
-
         print(f'The direction is {direction} and the number is {number}')
 
         if direction == 'L':
-            dial -= number
+            passed, pointing, dial = add_dial(dial, -number)
         else:
-            dial += number
+            passed, pointing, dial = add_dial(dial, number)
 
 
-        if dial >= 100:
-            dial = dial - 100
-        elif dial < 0:
-            dial = 100 + dial
+        final_count += passed + int(pointing)
 
-        if dial == 0:
-            password += 1
+        pointing_count += int(pointing)
+        passed_count += passed
+
+
 
         print(f'\n Dial is now at {dial}!')
-    print(f'\nThe password is {password}!')
+        print(f'\nPassed through zero {passed_count} times')
+        print(f'Stopped at zero {pointing_count} times\n')
 
-result = part1()
+    final_count = passed_count + pointing_count
+    print(f'\nThe password is {final_count}!')
+
+
+
+result = part1_2()
