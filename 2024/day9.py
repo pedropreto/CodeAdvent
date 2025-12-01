@@ -4,8 +4,6 @@ import time
 import os
 import re
 
-from numba.misc.findlib import find_lib
-
 file = 'day' + re.findall(r'\d+', os.path.basename(__file__))[0] + '.txt'
 file_path = os.path.join("inputs", file)
 
@@ -23,11 +21,8 @@ def part1():
     # represent string of idx and blank spaces
     for i in range(len(disk_map)):
         if i % 2 == 0:
-            if idx > 9:
-                idx = idx - 10
-                decades += 1
             for j in range(int(disk_map[i])):
-                idx_list.append(decades * 10 + idx)
+                idx_list.append(idx)
             final_string += str(idx) * int(disk_map[i])
             idx += 1
         else:

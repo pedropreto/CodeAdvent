@@ -20,9 +20,10 @@ def part1():
 
     print(new_stones)
 
-    while blinks <= 25:
+    while blinks <= 50:
         stones = list(new_stones)
         add_stones = 0
+        print(blinks)
 
         for idx, stone in enumerate(stones):
             if int(stone) == 0:
@@ -38,9 +39,13 @@ def part1():
                 new_stones[idx+add_stones] = int(stone) * 2024
 
         blinks += 1
-        print(f'After {blinks} blinks we have the stones {new_stones}')
+        # print(f'After {blinks} blinks we have the stones {new_stones}')
 
     return len(new_stones)
+
+
+def part2():
+
 
 result = part1()
 print(result)
