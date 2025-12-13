@@ -10,7 +10,8 @@ file_path = os.path.join("inputs", file)
 
 # opens the file
 with open(file_path, "r") as f:
-    lines = [line.rstrip() for line in f]  # takes the \n
+    lines = [list(line.rstrip()) for line in f]
+
 
 
 def is_accessible(row, column):
@@ -27,7 +28,6 @@ def is_accessible(row, column):
                 target_number += 1
 
     if target_number < 4:
-        print(f'In row {row} and column {column} there is a roll of paper accessible by fork!')
         return True
 
     return False
@@ -45,7 +45,43 @@ def part1():
     return count_rolls
 
 
+def count_roll_removing():
+    rows = len(lines)
+    cols = len(lines[0])
+    count_rolls = 0
+    removal_coordinates = []
+    for i in range(cols):
+        for j in range(rows):
+            if lines[j][i] == '@':
+                if is_accessible(j, i):
+                    count_rolls += 1
+                    # remove roll
+                    removal_coordinates.append((j,i))
+
+    return count_rolls, removal_coordinates
 
 
-result = part1()
+def replace_rolls(removal_coordinates):
+    for coordinates in removal_coordinates:
+        r, c = coordinates[0], coordinates[1]
+        lines[r][c] = '.'
+
+
+def part2():
+    # If you need the lines back as strings:
+    total_removals = 0
+    count_rolls = 1
+    while count_rolls > 0:
+        count_rolls, removal_coordinates = count_roll_removing()
+        replace_rolls(removal_coordinates)
+        total_removals += count_rolls
+        print(f'In this round we removed {count_rolls} and in total {total_removals}!')
+
+
+    return total_removals
+
+
+
+
+result = part2()
 print(result)
