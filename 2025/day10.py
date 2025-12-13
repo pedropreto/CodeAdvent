@@ -38,7 +38,7 @@ def toggle_lights(button, lights):
 
 
 def part1():
-    min_button_presses = []
+    min_lens = []
     for line in lines:
         lights, buttons = parse_input(line)
         current_lights = []
@@ -47,46 +47,29 @@ def part1():
         light_idx = [i for i, l in enumerate(lights) if l == '#']
         print(f'Lights on are {light_idx}')
 
+        # need to use tuples for hashability, lists don't work
+        queue = deque([(tuple(current_lights), [])])
+        seen = {tuple(current_lights)}
 
-        # found = False
-        button_presses = []
-        used_prefixes = []
+        while queue:
+            # get the first state visited
+            state, sequence = queue.popleft()
 
-        # convert buttons to tuples for hashable comparison
-        buttons_tuple = [tuple(b) for b in buttons]
+            # check if target
+            if state == tuple(light_idx):
+                min_lens.append(len(sequence))
+                print([buttons[i] for i in sequence], len(sequence))
+                break
 
-        for button_order in itertools.permutations(buttons_tuple):
-            # skip permutation that starts with best prefix found
-            # it can be improved because the order of the prefix does not matter
-            skip = False
-            for prefix in used_prefixes:
-                if Counter(button_order[:len(prefix)]) == Counter(prefix):
-                    skip = True
-                    break
-            if skip:
-                continue
+            # Try pressing each button
+            for i, button in enumerate(buttons):
+                new_state = toggle_lights(button, list(state))
+                new_state_tuple = tuple(sorted(new_state))
+                if new_state_tuple not in seen:
+                    seen.add(new_state_tuple)
+                    queue.append((new_state_tuple, sequence + [i]))
 
-            button_press = 0
-            current_lights_copy = current_lights.copy()
-
-            for button in button_order:
-                current_lights_copy = toggle_lights(button, current_lights_copy)
-                button_press += 1
-
-                if button_press > min(button_presses, default=len(button_order)):
-                    break
-
-                if current_lights_copy == light_idx:
-                    # print(f'It turned the lights on correctly!')
-                    # print(f'Button order is {button_order[:button_press]} pressing {button_press} times!')
-
-                    button_presses.append(button_press)
-                    used_prefixes.append(button_order[:button_press])
-                    break
-
-        min_button_presses.append(min(button_presses))
-
-    return sum(min_button_presses)
+    return sum(min_lens)
 
 
 def part1_binary():
@@ -122,5 +105,5 @@ def part1_binary():
     return sum(min_lens)
 
 
-result = part1_binary()
+result = part1()
 print(result)
