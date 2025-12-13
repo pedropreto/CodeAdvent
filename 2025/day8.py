@@ -83,5 +83,42 @@ def part1():
 
     return product
 
-result = part1()
+
+def part2():
+    junction_boxes = parse_points()
+
+    pairs = min_distances(junction_boxes)
+
+    circuits = [{box} for box in junction_boxes]
+
+    for _, p1, p2 in pairs:
+        c1 = c2 = None
+        for c in circuits:
+            # puts cX as the circuit that has pX
+            if p1 in c:
+                c1 = c
+                print(f'{c} contains {p1}!')
+            if p2 in c:
+                print(f'{c} contains {p2}!')
+                c2 = c
+
+        if c1 is not c2:
+            # if they are not the same, merge and remove
+            c1.update(c2)
+            print(f'Updated {c1} to include {c2}')
+            circuits.remove(c2)
+            print(f'Removed {c2}')
+
+        if len(circuits) == 1:
+            print(f'The juntion boxes that connected the last 2 circuits were {p1} and {p2}')
+            return p1[0]*p2[0]
+
+
+
+
+
+
+
+
+result = part2()
 print(result)
